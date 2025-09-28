@@ -18,6 +18,8 @@ function setup() {
 
 
     apple = new Eatable(width/5, height - (height/8));
+    player.groundY = player.boundaryY + player.boundaryHeight; 
+
     playMusic();
 
 }

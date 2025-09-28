@@ -5,7 +5,7 @@ class Character {
         this.sprite.addAnimation("walk", "assets/images/character/walk1.png", "assets/images/character/walk2.png", "assets/images/character/walk3.png");
         this.sprite.addAnimation("eat", "assets/images/character/eat1.png", "assets/images/character/eat2.png", "assets/images/character/eat3.png");
         this.speed = 5;
-        this.sprite.scale = 3;
+        this.sprite.scale = 2;
         this.isEating = false;
         this.isMoving = false;
 
