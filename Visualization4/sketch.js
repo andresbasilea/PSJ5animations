@@ -1,6 +1,8 @@
 let player;
 let floorRemainingLife;
 let resetButton; 
+let currentWorld = 1;
+let savePosition = [0,0];
 
 
 function preload(){
@@ -24,6 +26,9 @@ function preload(){
   almendraSays = loadImage("assets/images/character/almendraSays.png");
   font = loadFont('assets/fonts/font1.otf');
 
+  bgWorld2 = loadImage('assets/images/backgrounds/summerBackground3.png');
+  
+
 
 }
 
@@ -42,10 +47,7 @@ function setup() {
     player.boundaryWidth = width-100;
     player.boundaryHeight = 150;
 
-
-    apple = new Eatable(width/5, height - (height/8));
-    apple2 = new Eatable(width/4, height - (height/8));
-    //player.groundY = player.boundaryY + player.boundaryHeight; 
+    setupWorld1();
 
     music.playSound();
     
@@ -53,7 +55,7 @@ function setup() {
 }
 
 function draw() {
-    image(bg, 0, 0, width, height); 
+    
 
     floorRemainingLife = floor(player.remainingLife)
     if(floorRemainingLife > 12){
@@ -63,35 +65,36 @@ function draw() {
       floorRemainingLife = 0;
     }
 
+    
+    almendraSays.resize(220,300);
+
+    if(currentWorld==1){
+      drawWorld1();
+    }
+
+    else if (currentWorld==2){
+      drawWorld2();
+    }
+
     // REMAINING LIFE
     text('Cadera', 60, 50);
     image(remainingLifeImages[floorRemainingLife], 50, 50);
-    almendraSays.resize(220,300);
 
-    if (player.sprite.overlap(apple.sprite) && player.isEating == true) {
-        apple.startEatingAnimation();
-        biting.playSound();
-        player.remainingLife += 1;
-        apple.sprite.remove();
-    }
-    if (player.sprite.overlap(apple2.sprite) && player.isEating == true) {
-        apple2.startEatingAnimation();
-        biting.playSound();
-        player.remainingLife += 1;
-        apple2.sprite.remove();
-    }
-
-    player.update();
-
-    player.display();
+    
 
     if(floorRemainingLife == 0){
       
       push();
-      textSize(50)
       let bbox = font.textBounds('Perdiste. Reemplazo total de cadera inminente', width/6, height/2);
-      rect(bbox.x, bbox.y, bbox.w + 50, bbox.h + 50);
-      text("REEMPLAZO TOTAL DE CADERA INMINENTE :(", width/6 + 25, height/2 +25)
+      fill(255,255,255)
+      noStroke();
+      rect(bbox.x-25, bbox.y-25, bbox.w + 500, bbox.h + 100);
+      fill(100,200,200);
+      noStroke();
+      rect(bbox.x, bbox.y, bbox.w + 450, bbox.h + 50);
+      textSize(50);
+      fill(0);
+      text("Perdiste. Almendra necesita cambio de cadera :(", width/6 + 25, height/2 +25)
       textAlign(CENTER)
       image(almendraSays, width/8, height/2)
       player.sprite.remove();
@@ -113,6 +116,69 @@ function draw() {
 }
 
 
+function setupWorld1(){
+  
+  currentWorld = 1;
+  apple = new Eatable(width/5, height - (height/8));
+  apple2 = new Eatable(width/4, height - (height/8));
+  
+}
+
+
+function drawWorld1(){
+  image(bg, 0, 0, width, height); 
+
+  if (player.sprite.overlap(apple.sprite) && player.isEating == true) {
+        apple.startEatingAnimation();
+        biting.playSound();
+        player.remainingLife += 1;
+        apple.sprite.remove();
+    }
+    if (player.sprite.overlap(apple2.sprite) && player.isEating == true) {
+        apple2.startEatingAnimation();
+        biting.playSound();
+        player.remainingLife += 1;
+        apple2.sprite.remove();
+    }
+
+    player.update();
+
+    player.display();
+
+    if(player.sprite.position.x == width - 110){
+      console.log("world 2 condition met");
+      setupWorld2();
+      redraw();
+    }
+}
+
+
+function setupWorld2(){
+
+  apple.sprite.remove();
+  apple2.sprite.remove();
+
+  console.log("setup world 2");
+  currentWorld = 2;
+  player.sprite.position.set(100, 50);
+
+}
+
+function drawWorld2(){
+  background(0);
+  image(bgWorld2, 0, 0, width, height); 
+  player.update();
+
+  player.display();
+
+  if (player.sprite.position.x == 50){
+    setupWorld1();
+    currentWorld = 1;
+    player.sprite.position.set(width-120, 50);
+    redraw();
+  }
+
+}
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
