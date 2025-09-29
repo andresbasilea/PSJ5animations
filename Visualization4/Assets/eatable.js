@@ -7,9 +7,10 @@ class Eatable {
             "assets/images/items/apple2.png",
             "assets/images/items/apple3.png",
             "assets/images/items/apple4.png",
+            "assets/images/items/apple5.png",
         );
         
-        this.sprite.animation.frameDelay = 10; // Adjust for speed (smaller number = faster)
+        this.sprite.animation.frameDelay = 1; // Adjust for speed (smaller number = faster)
         this.sprite.visible = true;
         this.sprite.animation.looping = false; // The eating animation should only play once
         this.sprite.scale = 2;
@@ -31,7 +32,6 @@ class Eatable {
             // this.sprite.animation.play();
             // this.sprite.animation.isOver = true;
             this.isBeingEaten = true;
-            
             this.sprite.changeAnimation("devour");
             this.sprite.animation.changeFrame(0);
             this.sprite.animation.play();
